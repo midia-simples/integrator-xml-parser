@@ -14,7 +14,8 @@ const requestParser = (user, password, methodName, objParams) =>
     `<?xml version="1.0" encoding="iso-8859-1"?>
     <methodCall>
       <methodName>${methodName}</methodName>
-      ${xmlBuildParams({ _user: user, _password: password })}
+      <params>
+      ${xmlBuildParams({ _user: user, _passwd: password })}
       ${xmlBuildParams(objParams)}
      </params>
     </methodCall>`
