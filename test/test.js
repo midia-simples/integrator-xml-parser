@@ -13,12 +13,13 @@ describe('xml Integrator Tests', () => {
       `<?xml version="1.0" encoding="iso-8859-1"?>
             <methodCall>
               <methodName>nomeMetodo</methodName>
+              <params>
               <param name="_user">
                     <value>
                       <string><![CDATA[usuario]]></string>
                     </value>
               </param>
-              <param name="_password">
+              <param name="_passwd">
                     <value>
                       <string><![CDATA[password]]></string>
                     </value>
