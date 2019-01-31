@@ -4,7 +4,7 @@ const xmlBuildParams = objParams =>
   Object.keys(objParams).reduce((acc, key) => (
     acc.concat(`<param name="${key}">
                   <value>
-                    <string><![CDATA[${objParams[key]}]]></string>
+                    <string><![CDATA[${encodeURIComponent(objParams[key])}]]></string>
                   </value>
                 </param>`)
   ), '')

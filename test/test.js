@@ -26,7 +26,7 @@ describe('xml Integrator Tests', () => {
               </param>
               <param name="metodo1">
                     <value>
-                      <string><![CDATA[parametro Metodo1]]></string>
+                      <string><![CDATA[parametro%20Metodo1]]></string>
                     </value>
                  </param><param name="metodo2">
                     <value>
