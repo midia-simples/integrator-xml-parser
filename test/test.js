@@ -219,4 +219,24 @@ describe('xml Integrator Tests', () => {
       })
     done()
   })
+
+  it('Request parsers OK = 1 Not Array', done => {
+    const expected = {ok: 1}
+    responseParser(`<?xml version="1.0" encoding="iso-8859-1"?>
+  <methodResponse>
+      <methodName>response</methodName>
+      <params>
+          <param name="ok">
+              <value>
+                  <boolean>1</boolean>
+              </value>
+          </param>
+      </params>
+  </methodResponse>`)
+      .then(resp => {
+        expect(resp).to.be.eql(expected)
+        done()
+      })
+  })
+
 })

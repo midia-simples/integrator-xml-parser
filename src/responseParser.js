@@ -57,6 +57,9 @@ const responseParser = xml => {
         return Promise.reject(res.methodresponse.fault.value.struct.member
           .reduce((acc, p) => ({ ...acc, [p['name']]: valueFormatter(p['value']) }), {}))
       }
+      if (!Array.isArray(res.methodresponse.params.param)) {
+        return { [res.methodresponse.params.param['$']['name']]: valueFormatter(res.methodresponse.params.param['value']) }
+      }
       return res.methodresponse.params.param
         .reduce((acc, p) => ({ ...acc, [p['$']['name']]: valueFormatter(p['value']) }), {})
     })
