@@ -1,53 +1,23 @@
-const { requestParser, removewhitesSpacesOutSideTags, responseParser } = require('../src')
+import { responseParser } from '../src'
 
-describe('xml Integrator Tests', () => {
-  it('requestParser', () => {
-    const received = requestParser('usuario',
-      'password',
-      'nomeMetodo',
-      {
-        metodo1: 'parametro Metodo1',
-        metodo2: 'parametroMetodo2'
-      })
-    const expected = removewhitesSpacesOutSideTags(
-      `<?xml version="1.0" encoding="iso-8859-1"?>
-            <methodCall>
-              <methodName>nomeMetodo</methodName>
-              <params>
-              <param name="_user">
-                    <value>
-                      <string><![CDATA[usuario]]></string>
-                    </value>
-              </param>
-              <param name="_passwd">
-                    <value>
-                      <string><![CDATA[password]]></string>
-                    </value>
-              </param>
-              <param name="metodo1">
-                    <value>
-                      <string><![CDATA[parametro%20Metodo1]]></string>
-                    </value>
-                 </param><param name="metodo2">
-                    <value>
-                      <string><![CDATA[parametroMetodo2]]></string>
-                    </value>
-                 </param>
-             </params>
-            </methodCall>`
-    )
-    expect(received).to.be.eql(expected)
-  })
-  it('responseParser OK = 1 - Xml de Sucesso', (done) => {
+describe('Suite responseParser', () => {
+  test('responseParser OK = 1 - Xml de Sucesso', () => {
     const expected = {
       ok: 1,
-      historico:
-        [ { data_processamento: '2018-09-20',
-          historico_da_conta: 'ATIVAÇÃO (VENDA + SERVIÇO) - TX ATIVAÇÃO ( 1/ 2)',
-          periodo: '00/00/0000 - 00/00/0000' },
-        { data_processamento: '2018-06-12',
+      historico: [
+        {
+          data_processamento: '2018-09-20',
+          historico_da_conta:
+            'ATIVAÇÃO (VENDA + SERVIÇO) - TX ATIVAÇÃO ( 1/ 2)',
+          periodo: '00/00/0000 - 00/00/0000',
+        },
+        {
+          data_processamento: '2018-06-12',
           historico_da_conta: 'TESTE 1 - TX. DE ATIVAÇÃO ( 4/ 5)',
-          periodo: '00/00/0000 - 00/00/0000' } ] }
+          periodo: '00/00/0000 - 00/00/0000',
+        },
+      ],
+    }
 
     responseParser(
       `<?xml version="1.0" encoding="iso-8859-1"?>
@@ -79,13 +49,11 @@ describe('xml Integrator Tests', () => {
                 </param>
             </params>
             </methodResponse>`
-    )
-      .then(res => {
-        expect(res).to.be.eql(expected)
-      })
-    done()
+    ).then(res => {
+      expect(res).toEqual(expected)
+    })
   })
-  it('responseParser OK = 1 - xml de Sucesso com result Vazio (<result/>)', (done) => {
+  test('responseParser OK = 1 - xml de Sucesso com result Vazio (<result/>)', () => {
     const expected = { ok: 1, historico: [] }
     responseParser(
       `<?xml version="1.0" encoding="iso-8859-1"?>
@@ -106,16 +74,22 @@ describe('xml Integrator Tests', () => {
                 </param>
             </params>
             </methodResponse>`
-    )
-      .then(res => {
-        expect(res).to.be.eql(expected)
-      })
-    done()
+    ).then(res => {
+      expect(res).toEqual(expected)
+    })
   })
-  it('responseParser OK = 1 - xml de Sucesso com result 1 row (<result><row></row></result>)', (done) => {
-    const expected = { ok: 1, historico: [ { data_processamento: '2018-09-20',
-          historico_da_conta: 'ATIVAÇÃO (VENDA + SERVIÇO) - TX ATIVAÇÃO ( 1/ 2)',
-          periodo: '00/00/0000 - 00/00/0000' } ] }
+  test('responseParser OK = 1 - xml de Sucesso com result 1 row (<result><row></row></result>)', () => {
+    const expected = {
+      ok: 1,
+      historico: [
+        {
+          data_processamento: '2018-09-20',
+          historico_da_conta:
+            'ATIVAÇÃO (VENDA + SERVIÇO) - TX ATIVAÇÃO ( 1/ 2)',
+          periodo: '00/00/0000 - 00/00/0000',
+        },
+      ],
+    }
 
     responseParser(
       `<?xml version="1.0" encoding="iso-8859-1"?>
@@ -142,17 +116,15 @@ describe('xml Integrator Tests', () => {
                 </param>
             </params>
             </methodResponse>`
-    )
-      .then(res => {
-        expect(res).to.be.eql(expected)
-      })
-    done()
+    ).then(res => {
+      expect(res).toEqual(expected)
+    })
   })
-  it('responseParser OK = 0 - Xml de Erro', (done) => {
+  test('responseParser OK = 0 - Xml de Erro', () => {
     const expected = {
       ok: 0,
       errmsg: '10 - Não possui extrato financeiro.',
-      coderro: '10'
+      coderro: '10',
     }
 
     responseParser(
@@ -178,16 +150,16 @@ describe('xml Integrator Tests', () => {
                         </value>
                     </param>
                 </params>
-            </methodResponse>`)
-      .then(res => {
-        expect(res).to.be.eql(expected)
-      })
-    done()
+            </methodResponse>`
+    ).then(res => {
+      expect(res).toEqual(expected)
+    })
   })
-  it('responseParser Fault- na montagem do XML', (done) => {
+  test('responseParser Fault- na montagem do XML', () => {
     const expected = {
       faultCode: 0,
-      faultString: '0000 - É necessário informar o código da view a ser executada'
+      faultString:
+        '0000 - É necessário informar o código da view a ser executada',
     }
     responseParser(`
       <?xml version="1.0" encoding="iso-8859-1"?>
@@ -212,31 +184,24 @@ describe('xml Integrator Tests', () => {
                   </struct>
               </value>
           </fault>
-      </methodResponse>`)
-      .then(() => done())
-      .catch(err => {
-        expect(err).to.be.eql(expected)
-      })
-    done()
+      </methodResponse>`).catch(err => {
+      expect(err).toEqual(expected)
+    })
   })
-
-  it('Request parsers OK = 1 Not Array', done => {
-    const expected = {ok: 1}
+  test('Response parsers OK = 1 Not Array', () => {
+    const expected = { ok: 1 }
     responseParser(`<?xml version="1.0" encoding="iso-8859-1"?>
-  <methodResponse>
-      <methodName>response</methodName>
-      <params>
-          <param name="ok">
-              <value>
-                  <boolean>1</boolean>
-              </value>
-          </param>
-      </params>
-  </methodResponse>`)
-      .then(resp => {
-        expect(resp).to.be.eql(expected)
-        done()
-      })
+                                  <methodResponse>
+                                      <methodName>response</methodName>
+                                      <params>
+                                          <param name="ok">
+                                              <value>
+                                                  <boolean>1</boolean>
+                                              </value>
+                                          </param>
+                                      </params>
+                                  </methodResponse>`).then(resp => {
+      expect(resp).toEqual(expected)
+    })
   })
-
 })

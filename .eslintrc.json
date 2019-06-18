@@ -1,8 +1,4 @@
 {
-    "extends": "standard",
-    "globals": {
-        "describe": true,
-        "it": true,
-        "expect": true
-    }
+  "parser": "@typescript-eslint/parser",
+  "extends": ["plugin:@typescript-eslint/recommended"]
 }
