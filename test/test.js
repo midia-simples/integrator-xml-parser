@@ -82,8 +82,10 @@ describe('xml Integrator Tests', () => {
     )
       .then(res => {
         expect(res).to.be.eql(expected)
+        done()
       })
-    done()
+      .catch(done)
+    
   })
   it('responseParser OK = 1 - xml de Sucesso com result Vazio (<result/>)', (done) => {
     const expected = { ok: 1, historico: [] }
@@ -109,8 +111,10 @@ describe('xml Integrator Tests', () => {
     )
       .then(res => {
         expect(res).to.be.eql(expected)
+        done()
       })
-    done()
+      .catch(done)
+  
   })
   it('responseParser OK = 1 - xml de Sucesso com result 1 row (<result><row></row></result>)', (done) => {
     const expected = { ok: 1, historico: [ { data_processamento: '2018-09-20',
@@ -145,8 +149,9 @@ describe('xml Integrator Tests', () => {
     )
       .then(res => {
         expect(res).to.be.eql(expected)
+        done()
       })
-    done()
+      .catch(done)
   })
   it('responseParser OK = 0 - Xml de Erro', (done) => {
     const expected = {
@@ -181,8 +186,10 @@ describe('xml Integrator Tests', () => {
             </methodResponse>`)
       .then(res => {
         expect(res).to.be.eql(expected)
+        done()
       })
-    done()
+      .catch(done)
+
   })
   it('responseParser Fault- na montagem do XML', (done) => {
     const expected = {
@@ -216,8 +223,9 @@ describe('xml Integrator Tests', () => {
       .then(() => done())
       .catch(err => {
         expect(err).to.be.eql(expected)
+        done();
       })
-    done()
+      .catch(done)
   })
 
   it('Request parsers OK = 1 Not Array', done => {
@@ -237,6 +245,7 @@ describe('xml Integrator Tests', () => {
         expect(resp).to.be.eql(expected)
         done()
       })
+      .catch(done)
   })
 
 })
