@@ -9,6 +9,7 @@ describe('xml Integrator Tests', () => {
         metodo1: 'parametro Metodo1',
         metodo2: 'parametroMetodo2'
       })
+      
     const expected = removewhitesSpacesOutSideTags(
       `<?xml version="1.0" encoding="iso-8859-1"?>
             <methodCall>
