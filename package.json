@@ -1,29 +1,53 @@
 {
-  "name": "integrator-xml-parser",
-  "version": "1.0.0",
-  "private": true,
-  "description": "",
-  "main": "src/index.js",
+  "name": "libtest",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "umd:main": "dist/libtest.umd.production.js",
+  "module": "dist/libtest.es.production.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
   "scripts": {
-    "test": "mocha --opts test/mocha.opts",
-    "lint": "eslint '**/*.js'",
-    "lint:fix": "eslint '**/*.js' --fix"
+    "postinstall": "tsdx build",
+    "lint": "eslint '**/*.ts'",
+    "lint:fix": "eslint '**/*.ts' --fix",
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "pretty-quick && eslint '**/*.ts' --fix && tsdx test"
   },
-  "author": "Amauri Dias",
-  "license": "ISC",
-  "dependencies": {
-    "html-entities": "^1.2.1",
-    "utf8": "^3.0.0",
-    "xml2js": "^0.4.19"
+  "standard": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint/eslint-plugin"
+    ]
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^5.12.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "mocha": "^5.2.0"
+    "@types/jest": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
+    "eslint": "^5.16.0",
+    "husky": "^2.4.1",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
+    "tsdx": "^0.6.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
   }
 }
