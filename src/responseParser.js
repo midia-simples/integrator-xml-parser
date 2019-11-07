@@ -24,14 +24,14 @@ const toArray = p => [p]
 
 const keyExistsInObject = (key, obj) => (key in obj)
 
+const evaluateAllEntriesObjectAndNormalizeValues = object => ({ ...Object
+  .keys(object)
+  .reduce((acc, key) => (
+    { ...acc, [key]: normalizeResponsesIntegrator(String(object[key]).trim()) }
+  ), {}) })
+
 const normalizeResponsesDomElement = arr =>
-  arr.map(r => (
-    { ...Object
-        .keys(r)
-        .reduce((acc, key) => (
-          { ...acc, [key]: normalizeResponsesIntegrator(String(r[key]).trim()) }
-        ), {}) }
-  ))
+  arr.map(evaluateAllEntriesObjectAndNormalizeValues)
 
 const valueFormatter = arrValue => {
   const keys = Object.keys(arrValue)
@@ -40,12 +40,15 @@ const valueFormatter = arrValue => {
   if (verifyIndexExistsInObjectPerType(keys, 'string')) { return compose(normalizeResponsesIntegrator, String)(arrValue[keys[keys.indexOf('string')]]) }
   if (verifyIndexExistsInObjectPerType(keys, 'double')) { return compose(normalizeResponsesIntegrator, String)(arrValue[keys[keys.indexOf('double')]]) }
   if (verifyIndexExistsInObjectPerType(keys, 'domelement')) {
+    if (NOT(arrValue.domelement.result) && NOT(arrValue.domelement.result === '')) {
+      return arrValue.domelement
+    }
     const rows = arrValue.domelement.result === ''
-    ? []
-    : arrValue.domelement.result.row
+      ? []
+      : arrValue.domelement.result.row
     return NOT(isArray(rows))
-    ? compose(normalizeResponsesDomElement, toArray)(rows)
-    : normalizeResponsesDomElement(rows)
+      ? compose(normalizeResponsesDomElement, toArray)(rows)
+      : normalizeResponsesDomElement(rows)
   }
   return arrValue
 }
@@ -60,9 +63,13 @@ const responseParser = xml => {
       if (!Array.isArray(res.methodresponse.params.param)) {
         return { [res.methodresponse.params.param['$']['name']]: valueFormatter(res.methodresponse.params.param['value']) }
       }
+      // console.log('bateu aqui', res.methodresponse.params.param[1].value)
       return res.methodresponse.params.param
         .reduce((acc, p) => ({ ...acc, [p['$']['name']]: valueFormatter(p['value']) }), {})
     })
 }
 
-module.exports = responseParser
+module.exports = {
+  responseParser,
+  valueFormatter
+}
