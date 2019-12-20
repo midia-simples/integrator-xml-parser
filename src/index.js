@@ -1,10 +1,15 @@
-const requestParser = require('./requestParser')
-const { responseParser, valueFormatter } = require('./responseParser')
-const { removewhitesSpacesOutSideTags } = require('./utils/handleStrings')
+const requestParser = require("./requestParser");
+const {
+  responseParser,
+  valueFormatter,
+  normalizeResponsesIntegrator
+} = require("./responseParser");
+const { removewhitesSpacesOutSideTags } = require("./utils/handleStrings");
 
 module.exports = {
   requestParser,
   removewhitesSpacesOutSideTags,
   responseParser,
-  valueFormatter
-}
+  valueFormatter,
+  normalizeResponsesIntegrator
+};
